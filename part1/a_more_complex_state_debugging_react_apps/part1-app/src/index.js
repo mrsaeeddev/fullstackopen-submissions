@@ -2,6 +2,25 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+const Statistics = ({good, neutral, bad, value}) => {
+
+    const checkNaN = (value) => {
+        return Number.isNaN(value) ? 0 : value;
+    }
+
+    return (
+        <>
+          <h3>Statistics</h3>
+            <p>good : {good}</p>
+            <p>neutral : {neutral}</p>
+            <p>bad : {bad}</p>
+            <p>all : {good+bad+neutral}</p>
+            <p>average : {checkNaN(value/(good+bad+neutral))}</p>
+            <p>positive : {checkNaN(good/(good+neutral+bad))*100}%</p>
+        </>
+    )
+}
+
 const Button = ({ onClick,text }) => (
     <>
         <button onClick={onClick} >{text}</button>
@@ -31,10 +50,6 @@ const App = (props) => {
         setValue(value-1);
     }
 
-    const checkNaN = (value) => {
-        return Number.isNaN(value) ? 0 : value;
-    }
-
     return (
         <div>
             <h1>give feedback</h1>
@@ -42,13 +57,7 @@ const App = (props) => {
             <Button onClick={setGoodFunction} text="good"/>
             <Button onClick={setNeutralFunction} text="neutral"/>
             <Button onClick={setBadFunction} text="bad"/>
-            <h3>Statistics</h3>
-            <p>good : {good}</p>
-            <p>neutral : {neutral}</p>
-            <p>bad : {bad}</p>
-            <p>all : {good+bad+neutral}</p>
-            <p>average : {checkNaN(value/(good+bad+neutral))}</p>
-            <p>positive : {checkNaN(good/(good+neutral+bad))*100}%</p>
+            <Statistics good={good} neutral={neutral} bad={bad} value={value} />
         </div>
       </div>
     )
