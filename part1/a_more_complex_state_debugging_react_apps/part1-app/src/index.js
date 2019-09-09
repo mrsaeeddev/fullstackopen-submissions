@@ -2,21 +2,30 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-const Statistics = ({ good, neutral, bad, value }) => {
+const Statistic = ({ text, value }) => {
+    return (
+        <tr>
+        <td>{text} : {value}</td>
+        </tr>
+    )
+}
 
+const Statistics = ({ good, neutral, bad, value }) => {
     const checkNaN = (value) => {
         return Number.isNaN(value) ? 0 : value;
     }
 
     return (
         <> {good + bad + neutral > 0 ?
-            (<div><h3>Statistics</h3>
-                <p>good : {good}</p>
-                <p>neutral : {neutral}</p>
-                <p>bad : {bad}</p>
-                <p>all : {good + bad + neutral}</p>
-                <p>average : {checkNaN(value / (good + bad + neutral))}</p>
-                <p>positive : {checkNaN(good / (good + neutral + bad)) * 100}%</p></div>)
+            (<table><h2>Statistics</h2>
+            <tbody>
+                <Statistic text="good" value={good}/>
+                <Statistic text="neutral" value={neutral} />
+                <Statistic text="bad" value={bad} />
+                <Statistic text="all" value={good + bad + neutral} />
+                <Statistic text="average" value={checkNaN(value / (good + bad + neutral))} />
+                <Statistic text="positive" value={`${checkNaN(good / (good + neutral + bad)) * 100}%`} />
+                </tbody></table>)
             : <div><br />No feedback given</div>
         }
         </>
