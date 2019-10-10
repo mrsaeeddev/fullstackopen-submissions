@@ -1,27 +1,25 @@
 import React, { useState } from "react";
 
-const Filter = ({persons,oldPersons,setPersons}) => {
+const Filter = ({setSearch,search}) => {
   const handleSearch = ev => {
-    let searchedpersons = persons.filter((asset) => asset.name.toLowerCase().indexOf(ev.target.value) !== -1);
-    setPersons(searchedpersons);
-    if(!ev.target.value){
-      setPersons(oldPersons)
-    }
+    search = ev.target.value.trim().toLowerCase();
+    setSearch(search)
 };
   return (
-    <input onChange={handleSearch} />
+    <input onChange={handleSearch}  value={search} />
   )
 }
 
 const PersonForm = ({persons, setPersons}) => {
-  const [newName, setNewName] = useState("");
+  const [newName, setNewName] = useState({name:"",number:""});
   const handleForm = ev => {
     ev.preventDefault();
 
     if (persons.some(person => person.name === newName.name)) {
       alert(`${newName.name} is already added to phonebook`);
     } else {
-      setPersons(persons.concat(newName));
+      persons = persons.concat(newName);
+      setPersons(persons);
       let emptyName = {
         name: "",
         number: ""
@@ -66,11 +64,14 @@ const PersonForm = ({persons, setPersons}) => {
   )
 }
 
-const Persons = ({persons}) => {
+const Persons = ({persons, search}) => {
+ 
   return (
-    <div>{persons.map((v, i) => {
-      return <div key={i}>{v.name} {v.number}</div>;
-    })}</div>
+    <div>{search.length > 0 ? 
+      persons.filter(person => {return person.name.toLowerCase().match(search)}).map((v, i) => {
+    return <div key={i}>{v.name} {v.number}</div> }): persons.map((v, i) => {
+      return <div key={i}>{v.name} {v.number}</div> })
+    }</div>
   )
 }
 
@@ -82,23 +83,18 @@ const App = () => {
     { name: 'Mary Poppendieck', number: '39-23-6423122' }
   ]);
 
-  const oldPersons = [
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ];
+  const [search, setSearch] = useState("");
 
   return (
     <div>
       <h2>phonebook</h2>
       <div>
-        filter shown with <Filter persons={persons} oldPersons={oldPersons} setPersons={setPersons} />
+        filter shown with <Filter search={search} setSearch={setSearch}  />
       </div>
       <h2>add a new</h2>
       <PersonForm persons={persons} setPersons={setPersons} />
       <h2>Numbers</h2>
-      <Persons persons={persons} />
+      <Persons persons={persons} search={search} setPersons={setPersons} />
     </div>
   );
 };
