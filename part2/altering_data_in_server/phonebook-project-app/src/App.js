@@ -68,13 +68,22 @@ const PersonForm = ({notes, setNote}) => {
   )
 }
 
-const Persons = ({notes, search}) => {
- 
+const Persons = ({notes, search, setNote}) => {
+  const deleteNote = (id) => {
+    if (window.confirm('Are you sure to delete this note?')) {
+      noteService.deleteNote(id);
+      notes = notes.filter((note) => note.id !== id)
+      setNote(notes);
+    }
+    else {
+      return null
+    }
+  }
   return (
     <div>{search.length > 0 ? 
       notes.filter(person => {return person.name.toLowerCase().match(search)}).map((v, i) => {
-    return <div key={i}>{v.name} {v.number}</div> }): notes.map((v, i) => {
-      return <div key={i}>{v.name} {v.number}</div> })
+    return <div key={i}>{v.name} {v.number}<button onClick={() => deleteNote(v.id)}>delete</button></div> }): notes.map((v, i) => {
+      return <div key={i}>{v.name} {v.number}<button onClick={() => deleteNote(v.id)}>delete</button></div> })
     }</div>
   )
 }

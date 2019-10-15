@@ -14,7 +14,7 @@ const update = (id, newObject) => {
 }
 
 const deleteNote = (id) => {
-    return Axios.delete(`${baseUrl}/${id}`)
+    return Axios.delete(`${baseUrl}/persons/${id}`)
 }
 
 export default {
