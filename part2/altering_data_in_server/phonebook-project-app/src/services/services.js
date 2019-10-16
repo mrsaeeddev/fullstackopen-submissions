@@ -10,7 +10,7 @@ const create = newObject => {
 }
 
 const update = (id, newObject) => {
-    return Axios.put(`${baseUrl}/${id}`,newObject)
+    return Axios.put(`${baseUrl}/persons/${id}`,newObject)
 }
 
 const deleteNote = (id) => {

@@ -14,10 +14,26 @@ const Filter = ({setSearch,search}) => {
 const PersonForm = ({notes, setNote}) => {
   const [newName, setNewName] = useState({name:"",number:""});
   const handleForm = ev => {
+    console.log(ev)
     ev.preventDefault();
-
+    let id;
+    let updated_notes;
     if (notes.some(person => person.name === newName.name)) {
-      alert(`${newName.name} is already added to phonebook`);
+      if(window.confirm(`${newName.name} is already added to phonebook. Replace the old number with a new one?`)) {
+        updated_notes = notes.filter((note) => { if (note.name === newName.name) {
+          note.number = newName.number;
+          id = note.id
+        }
+        return note;
+      })
+        noteService.update(id, newName)
+        setNote(updated_notes)
+        let emptyName = {
+          name: "",
+          number: ""
+        };
+        setNewName(emptyName);
+      }
     } else {
       noteService.create(newName)
         notes = notes.concat(newName);
